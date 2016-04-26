@@ -280,7 +280,7 @@ class BaseModel {
                     if (value) {
                         if (filterName == 'strip_tags') {
                             this.set(name, value.replace(/<\/?[^>]+>/gi, '')
-                                .replace(/(.*)?(\r\n|\n|\r)+(.*)?/g, '$1\n$3')); // заміна декількох перенесень рядків на одинарне;
+                                .replace(/(.*)?(\r\n|\n|\r)+(.*)?/g, '$1\n$3'));
 
                         }
                         if (filterName == 'numeric' && !isNaN(Number(value))) {
@@ -343,7 +343,7 @@ class BaseModel {
                 case 'required' :
                 {
                     if (!value) {
-                        this.addError(name, 'Поле {name} не може бути пустим'.replace('{name}', name));
+                        this.addError(name, 'Field {name} is required'.replace('{name}', name));
                     }
                     break;
                 }
@@ -351,20 +351,20 @@ class BaseModel {
                 {
                     if (this.isNumeric(value)) {
                         if (!validatorParams.hasOwnProperty('allowFloat') && validatorParams.allowFloat && this.isFloat(value)) {
-                            this.addError(name, 'Поле {name} повинно містити тільки цілі числа'.replace('{name}', name));
+                            this.addError(name, 'Field {name} can be only float type'.replace('{name}', name));
                         }
 
                         if (validatorParams.hasOwnProperty('max') && value > validatorParams.max) {
-                            this.addError(name, 'Значення поля {name} не повинно бути більше ніж ' + validatorParams.max
+                            this.addError(name, 'Field {name} value can not be greater than ' + validatorParams.max
                             + ''.replace('{name}', name));
                         }
 
                         if (validatorParams.hasOwnProperty('min') && value < validatorParams.min) {
-                            this.addError(name, 'Значення поля {name} не повинно бути менше ніж ' + validatorParams.min
+                            this.addError(name, 'Field {name} value can not be less than ' + validatorParams.min
                             + ''.replace('{name}', name));
                         }
                     } else {
-                        this.addError(name, 'Поле {name} повинно містити тільки числа'.replace('{name}', name));
+                        this.addError(name, 'Field {name} can be only numeric'.replace('{name}', name));
                     }
 
                     break;
@@ -372,13 +372,13 @@ class BaseModel {
                 case 'length' :
                 {
                     if (validatorParams.hasOwnProperty('max') && value !== null && value.length > validatorParams.max) {
-                        this.addError(name, 'Значення поля {name} не повинно містити більше ніж ' + validatorParams.max
-                        + ' символів'.replace('{name}', name));
+                        this.addError(name, 'Field {name} length can not be greater than ' + validatorParams.max
+                        + ' symobls'.replace('{name}', name));
                     }
 
                     if (validatorParams.hasOwnProperty('min') && value !== null && value.length < validatorParams.min) {
-                        this.addError(name, 'Значення поля {name} не повинно містити менше ніж ' + validatorParams.min
-                        + ' символів'.replace('{name}', name));
+                        this.addError(name, 'Field {name} length can not be less than ' + validatorParams.min
+                        + ' symobls'.replace('{name}', name));
                     }
                     break;
                 }
