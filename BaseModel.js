@@ -1,5 +1,5 @@
 /**
- * Реалізація базового класу моделі для CouchDB на ES6 Classes
+ * Base model implementation for CouchDB with ES6 Classes
  * Created by howard on 30.09.15.
  */
 
@@ -14,24 +14,24 @@ var config = require('config'),
 var _id = Symbol();
 
 /**
- * атрибути моделі {*}
+ * model attributes {*}
  */
 var _attributes = Symbol();
 
 /**
- * флаг стану моделі boolean
+ * model state flag boolean
  */
 var _isNewModel = Symbol();
 
 /**
- * валідатори моделі [{*}]
+ * model validators [{*}]
  */
 var _attrValidators = Symbol();
 
 var _unsafeAttributes = Symbol();
 
 class BaseModel {
-    constructor(attributes) { //class constructor
+    constructor(attributes) {
         attributes = attributes || {};
         this.errors = {};
         this[_unsafeAttributes] = [];
@@ -45,7 +45,7 @@ class BaseModel {
     }
 
     /**
-     * Додає валідатори до атрибутів
+     * Add validators to attributes
      */
     appendValidators() {
         if (this.rules().length) {
@@ -62,17 +62,17 @@ class BaseModel {
                             }
                         }.bind(this));
                     } else {
-                        throw new Error('В моделі є неправильне правило валідації');
+                        throw new Error('Model has wrong validator rule');
                     }
                 } else {
-                    throw new Error('Правила валідації мають містити масив масивів атрибутів моделі та об\'єкту валідатора');
+                    throw new Error('Validators rules had to be an array of attributes array and validator object');
                 }
             }.bind(this));
         }
     }
 
     /**
-     * Встановлює значення за замовчуванням
+     * Set default values for attributes
      */
     setDefaultValues() {
         if (_.isObject(this.defaultValues())) {
@@ -83,7 +83,7 @@ class BaseModel {
     }
 
     /**
-     * Повертає список валідаторів атрибутів
+     * Returns attributes validators list
      * @returns {*}
      */
     get validators() {
@@ -91,7 +91,7 @@ class BaseModel {
     }
 
     /**
-     * Повертає валідатори атрибуту
+     * Returns attribute validators
      * @param field
      * @returns {*}
      */
@@ -102,7 +102,7 @@ class BaseModel {
     }
 
     /**
-     * Додає новий валідатор до атрибуту
+     * Add new attribute validator
      * @param field
      * @param validator
      */
@@ -121,9 +121,9 @@ class BaseModel {
     }
 
     /**
-     * Видаляє валідатор атрибуту моделі
+     * Removes attribute validator
      * @param field
-     * @param [validatorName] якщо не вказане ім'я валідатора, будуть видалені всі валідатори атрибуту
+     * @param [validatorName] if validator name is empty - all validators will be removed
      * @returns BaseModel
      */
     removeValidator(field, validatorName) {
@@ -140,7 +140,7 @@ class BaseModel {
     }
 
     /**
-     * Значення атрибутів за замовчуванням
+     * Default attributes values
      * @returns {*}
      */
     defaultValues() {
@@ -148,11 +148,11 @@ class BaseModel {
     }
 
     /**
-     * Встановлює занчення атрибуту моделі, якщо атрибут є безпечним
+     * Set safe attribute value
      * @param name
      * @param value
      * @returns {*}
-     * @param [isDynamic] boolean динамічний атрибут
+     * @param [isDynamic] boolean dynamic attribute
      */
     set(name, value, isDynamic) {
         isDynamic = isDynamic || false;
@@ -162,7 +162,7 @@ class BaseModel {
     }
 
     /**
-     * Повертає значення атрибуту, якщо воно присутнє у списку атрибутів
+     * Returns attribute value
      * @param name
      * @returns {*}
      */
@@ -173,7 +173,7 @@ class BaseModel {
     }
 
     /**
-     * Повертає флаг чи модель нова, чи редагується
+     * Check if model is new or on update
      * @returns {*}
      */
     get isNewModel() {
@@ -181,7 +181,7 @@ class BaseModel {
     }
 
     /**
-     * Правила валідації
+     * Validatoin rules
      * @returns {Array}
      */
     rules() {
@@ -189,7 +189,7 @@ class BaseModel {
     }
 
     /**
-     * Фільтри моделі. Доступні: strip_tags - чистить html-теги та заміняє переноси рядка на <br\>
+     * Model filters. For now exists one filter: strip_tags - clears html-tags and replace \n to <br\>
      * @returns {{}}
      */
     filters() {
@@ -197,7 +197,7 @@ class BaseModel {
     }
 
     /**
-     * Список атрбутів
+     * Returns attributes list
      * @returns {string[]}
      */
     attributesList() {
@@ -205,7 +205,7 @@ class BaseModel {
     }
 
     /**
-     * Ініціалізація небезпечних атрибутів
+     * Unsafe attributes initialization
      */
     setUnsafeAttributes()
     {
@@ -221,7 +221,7 @@ class BaseModel {
     }
 
     /**
-     * Додає новий небезпечний атрибут
+     * Add unsafe attributes
      * @param attribute
      */
     addUnsafeAttribute(attribute)
@@ -236,7 +236,7 @@ class BaseModel {
     }
 
     /**
-     * Небезпечні атрибути, які не повинні змінюватись під час редагування моделі
+     * Unsafe attributes, which should not be saved on model update
      * @returns {Array}
      */
     unsafeAttributesList() {
@@ -244,7 +244,7 @@ class BaseModel {
     }
 
     /**
-     * Ініціалізація властивостей. Якщо властивість є у моделі списку, вона буде проініціалізована.
+     * Attributes initialization
      * @param attributes
      */
     set attributes(attributes) {
@@ -256,7 +256,7 @@ class BaseModel {
     }
 
     /**
-     * Перевіряє чи атрибут є безпечним. Небезпечні атрибути не повинні бути збережені при редагуванні
+     * Check if attribute is safe. Unsafe attributes should not be saved on update
      * @param attribute
      * @returns {boolean}
      */
@@ -270,7 +270,7 @@ class BaseModel {
     }
 
     /**
-     * Приміняє фільтри до моделі
+     * Attribute filters
      */
     applyFilters() {
         if (Object.keys(this.filters()).length) {
@@ -293,7 +293,7 @@ class BaseModel {
     }
 
     /**
-     * Повертає _id моделі
+     * Returns model _id
      * @returns string
      */
     get id() {
@@ -301,7 +301,7 @@ class BaseModel {
     }
 
     /**
-     * Повертає значення атрибутів {attrName: value}
+     * Returns attributes {attrName: value}
      * @returns {*}
      */
     get attributes() {
@@ -309,7 +309,7 @@ class BaseModel {
     }
 
     /**
-     * Додає помилку до відповідного атрибуту моделі
+     * Add an error for the class attribute
      * @param attribute
      * @param error
      */
@@ -319,7 +319,7 @@ class BaseModel {
     }
 
     /**
-     * Повертає імя поточного класу
+     * Returns current classname
      * @returns {*}
      */
     get className() {
@@ -327,7 +327,7 @@ class BaseModel {
     }
 
     /**
-     * Виконує валідацію поля відповідно до заданого правила
+     * Validate whole attribute by name
      * @param name
      * @param validatorParams
      */
@@ -387,7 +387,7 @@ class BaseModel {
     }
 
     /**
-     * Перевірка на число
+     * Check value is numeric type
      * @param n
      * @returns {boolean}
      */
@@ -396,7 +396,7 @@ class BaseModel {
     }
 
     /**
-     * Перевіряє чи значення з плаваючою крапкою
+     * Check value is float type
      * @param n
      * @returns {boolean}
      */
@@ -405,7 +405,7 @@ class BaseModel {
     }
 
     /**
-     * Виконується перед збереженням моделі. Якщо реалізований в класі-нащадку, повинен викликати super.beforeSave()
+     * Calls before model save. You must call super.beforeSave() in inherited class
      */
     beforeSave() {
         if (!this.isNewModel && this[_unsafeAttributes].length) {
@@ -418,7 +418,7 @@ class BaseModel {
     }
 
     /**
-     * Виконує валідацію атрибутів моделі
+     * Validates model attributes
      * @returns {boolean}
      */
     validate() {
@@ -434,7 +434,7 @@ class BaseModel {
     }
 
     /**
-     * Знаходить оголошення та популює модель по id
+     * Finds entity by id
      * @param id
      */
     * findById(id) {
@@ -456,7 +456,7 @@ class BaseModel {
     }
 
     /**
-     * Зберігає модель в CouchDB
+     * Saves model into CouchDB
      * @param validate
      */
     * save(validate) {
