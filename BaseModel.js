@@ -1,15 +1,15 @@
 /**
  * Base model implementation for CouchDB with ES6 Classes
- * Created by howard on 30.09.15.
+ * Created by howardEagle on 30.09.15.
  */
 
 "use strict";
 
-var config = require('config'),
-    coNano = require('../helpers/co_nano'),
-    db = coNano.db.use('dom4'),
-    _ = require('underscore'),
-    co = require('co');
+var co = require('co'),
+    nano = require('nano')('http://localhost:5984')
+    coNano = require('co-nano')(nano),
+    db = coNano.db.use('your_database'),
+    _ = require('underscore');
 
 var _id = Symbol();
 
