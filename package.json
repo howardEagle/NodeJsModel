@@ -1,0 +1,21 @@
+{
+  "name": "NodeJsModel",
+  "description": "Model realization for Node.js and CouchDB",
+  "version": "0.1",
+  "homepage": "https://github.com/howardEagle/NodeJsModel",
+  "repository": "https://github.com/howardEagle/NodeJsModel",
+  "author": {
+    "name": "Vovchuk Bogdan",
+    "url": "https://hostcost.net"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "co": "latest",
+    "nano": "latest",
+    "co-nano": "latest",
+    "underscore": "latest"
+  },
+  "engines": {
+    "node": ">= 5.0.0"
+  }
+}
